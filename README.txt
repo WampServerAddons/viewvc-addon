@@ -37,15 +37,3 @@ Manual install instructions:
 Using the Installer:
  usage: installer.bat
 
-
-TODO:
- * section on troubleshooting
- * integration with wampserver manager menu on systray
- * virtual hosting (viewvc.*)
- * add abillity to run using mod_python or mod_wsgi instead of just CGI
- * optional features like pygments and MySQL support
-
-FIXME:
- * spelling/capitalization check on all files
- * currently only Subversion support tested/supported
- * alias files contain a reference to the VIEWVC_VERSION hard coded. this needs to be more generic
