@@ -39,26 +39,27 @@ mkdir %TMP%
 REM download ViewVC archive to temp directory
 echo 	Downloading %ADDON% binaries to temp directory...
 wget.exe -nd -q -P %TMP% %VIEWVC_DOWNLOAD%
+if not %ERRORLEVEL%==0 (echo FAIL: could not download %ADDON% binaries& pause& exit 1)
 
 REM unzip the downloaded source files and install them
 echo 	Extracting the files from the downloaded archive...
 unzip.exe -q %TMP%\%VIEWVC_FILE%.zip -d %TMP%
+if not %ERRORLEVEL%==0 (echo FAIL: could not extract %ADDON% binaries& pause& exit 1)
 
 REM install the ViewVC files in the WampServer install directory
 echo 	Running the ViewVC installer to put ViewVC in the Apps directory...
-python %TMP%\%VIEWVC_FILE%\viewvc-install --prefix=%WAMP_VIEWVC% --destdir=""
+python %TMP%\%VIEWVC_FILE%\viewvc-install --prefix=%WAMP_VIEWVC% --destdir=""  > NUL 2>&1
+if not %ERRORLEVEL%==0 (echo FAIL: could not install %ADDON% binaries& pause& exit 1)
 
 REM install the apache config file for ViewVC
-REM FIXME: may be able to skip moving to %TMP% and just copy to %WAMP_ALIAS%
-REM FIXME: and rename during that copy command
 echo 	Installing %ADDON% configuration files...
-copy wamp\alias\%VIEWVC_ALIAS% %TMP%
-ren %TMP%\%VIEWVC_ALIAS% viewvc.conf
-move %TMP%\viewvc.conf %WAMP%\alias
+copy wamp\alias\%VIEWVC_ALIAS% %WAMP%\alias\viewvc.conf
+if not %ERRORLEVEL%==0 (echo FAIL: could not move configuration files& pause& exit 1)
 
 REM install a copy of the viewvc.conf file configured to work with WampServer
 echo 	Configuring viewvc.conf to work with WampServer...
 copy viewvc.conf %WAMP_VIEWVC%
+if not %ERRORLEVEL%==0 (echo FAIL: could not move configuration files& pause& exit 1)
 
 REM clean up temp files
 echo 	Cleaning up temp files...
